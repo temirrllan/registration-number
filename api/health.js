@@ -1,14 +1,22 @@
 // api/health.js
-import { pool } from './_db.js'
+import { getPool } from './_db.js'
 
 export default async function handler(req, res) {
   try {
-    await pool.query('SELECT 1')
+    const pool = getPool()
+    const r = await pool.query('SELECT current_database() AS db')
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ ok: true }))
+    res.end(JSON.stringify({ ok: true, db: r.rows[0].db }))
   } catch (e) {
     res.statusCode = 500
-    res.end(JSON.stringify({ ok: false, error: 'db' }))
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({
+      ok: false,
+      error: {
+        code: e?.code || 'UNKNOWN',
+        message: (e?.message || '').slice(0, 140),
+      }
+    }))
   }
 }

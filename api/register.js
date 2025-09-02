@@ -1,21 +1,16 @@
 // api/register.js
-import { pool } from './_db.js'
+import { getPool } from './_db.js'
 
 function isStringFilled(x) {
   return typeof x === 'string' && x.trim() !== ''
 }
 
 async function readJson(req) {
-  // В serverless-функции Vercel тело не парсится автоматически — читаем вручную
   return await new Promise((resolve, reject) => {
     let data = ''
-    req.on('data', (chunk) => (data += chunk))
+    req.on('data', (c) => (data += c))
     req.on('end', () => {
-      try {
-        resolve(data ? JSON.parse(data) : {})
-      } catch (e) {
-        reject(e)
-      }
+      try { resolve(data ? JSON.parse(data) : {}) } catch (e) { reject(e) }
     })
     req.on('error', reject)
   })
@@ -38,6 +33,7 @@ export default async function handler(req, res) {
       return res.end(JSON.stringify({ ok: false, error: 'Все поля обязательны' }))
     }
 
+    const pool = getPool()
     const q = `
       INSERT INTO public.registrations (name, email, phone, bio)
       VALUES ($1, $2, $3, $4)
@@ -53,6 +49,13 @@ export default async function handler(req, res) {
     console.error('register error:', e)
     res.statusCode = 500
     res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ ok: false, error: 'Internal server error' }))
+    res.end(JSON.stringify({
+      ok: false,
+      error: {
+        code: e?.code || 'UNKNOWN',
+        message: (e?.message || '').slice(0, 140),
+        type: 'server_error'
+      }
+    }))
   }
 }
