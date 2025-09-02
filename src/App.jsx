@@ -7,7 +7,8 @@ export default function App() {
     phone: '',
     bio: '',
   })
-  const [status, setStatus] = useState(null)
+  const [status, setStatus] = useState(null) // null | 'loading' | 'success' | 'error'
+  const [errorText, setErrorText] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -17,6 +18,7 @@ export default function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
+    setErrorText('')
 
     try {
       const res = await fetch('/api/register', {
@@ -25,9 +27,19 @@ export default function App() {
         body: JSON.stringify(form),
       })
 
-      if (!res.ok) throw new Error('Request failed')
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        setErrorText(
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.code || 'Ошибка сервера'
+        )
+        throw new Error('Request failed')
+      }
+
       setStatus('success')
-    } catch (err) {
+      setForm({ name: '', email: '', phone: '', bio: '' })
+    } catch {
       setStatus('error')
     }
   }
@@ -45,6 +57,7 @@ export default function App() {
             name="name"
             value={form.name}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -56,6 +69,7 @@ export default function App() {
             name="email"
             value={form.email}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -68,6 +82,7 @@ export default function App() {
             name="phone"
             value={form.phone}
             onChange={handleChange}
+            required
           />
           <p className="form-hint">
             Номер телефона нужен для подтверждения и входа в систему
@@ -82,6 +97,7 @@ export default function App() {
             name="bio"
             value={form.bio}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -95,7 +111,9 @@ export default function App() {
           <p className="msg ok">Данные успешно отправлены.</p>
         )}
         {status === 'error' && (
-          <p className="msg err">Произошла ошибка. Попробуйте снова.</p>
+          <p className="msg err">
+            Произошла ошибка. {errorText && <>Код: <b>{errorText}</b></>}
+          </p>
         )}
       </form>
     </div>

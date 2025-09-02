@@ -1,4 +1,3 @@
-// api/health.js
 import { getPool } from './_db.js'
 
 export default async function handler(req, res) {
@@ -15,7 +14,7 @@ export default async function handler(req, res) {
       ok: false,
       error: {
         code: e?.code || 'UNKNOWN',
-        message: (e?.message || '').slice(0, 140),
+        message: (e?.message || '').slice(0, 140)
       }
     }))
   }

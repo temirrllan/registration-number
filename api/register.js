@@ -1,4 +1,3 @@
-// api/register.js
 import { getPool } from './_db.js'
 
 function isStringFilled(x) {
@@ -53,8 +52,7 @@ export default async function handler(req, res) {
       ok: false,
       error: {
         code: e?.code || 'UNKNOWN',
-        message: (e?.message || '').slice(0, 140),
-        type: 'server_error'
+        message: (e?.message || '').slice(0, 140)
       }
     }))
   }
