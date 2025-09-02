@@ -7,7 +7,7 @@ export default function App() {
     phone: '',
     bio: '',
   })
-  const [status, setStatus] = useState(null) // null | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -45,7 +45,6 @@ export default function App() {
             name="name"
             value={form.name}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -57,7 +56,6 @@ export default function App() {
             name="email"
             value={form.email}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -70,7 +68,6 @@ export default function App() {
             name="phone"
             value={form.phone}
             onChange={handleChange}
-            required
           />
           <p className="form-hint">
             Номер телефона нужен для подтверждения и входа в систему
@@ -85,7 +82,6 @@ export default function App() {
             name="bio"
             value={form.bio}
             onChange={handleChange}
-            required
           />
         </div>
 

@@ -1,3 +1,4 @@
+// api/health.js
 import { pool } from './_db.js'
 
 export default async function handler(req, res) {
@@ -8,7 +9,6 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ ok: true }))
   } catch (e) {
     res.statusCode = 500
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ ok: false }))
+    res.end(JSON.stringify({ ok: false, error: 'db' }))
   }
 }

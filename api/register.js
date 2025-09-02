@@ -1,3 +1,4 @@
+// api/register.js
 import { pool } from './_db.js'
 
 function isStringFilled(x) {
@@ -5,11 +6,16 @@ function isStringFilled(x) {
 }
 
 async function readJson(req) {
+  // В serverless-функции Vercel тело не парсится автоматически — читаем вручную
   return await new Promise((resolve, reject) => {
     let data = ''
-    req.on('data', (c) => (data += c))
+    req.on('data', (chunk) => (data += chunk))
     req.on('end', () => {
-      try { resolve(data ? JSON.parse(data) : {}) } catch (e) { reject(e) }
+      try {
+        resolve(data ? JSON.parse(data) : {})
+      } catch (e) {
+        reject(e)
+      }
     })
     req.on('error', reject)
   })
