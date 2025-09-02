@@ -1,0 +1,111 @@
+/* базовые */
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #f8fafc;
+}
+
+/* контейнер карточки */
+.container {
+  max-width: 28rem;            /* max-w-md */
+  margin: 2rem auto;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 0.5rem;        /* rounded-lg */
+  box-shadow: 0 4px 6px rgba(0,0,0,.1); /* shadow-md */
+  z-index: 10;
+}
+
+/* фоны-«пузыри» */
+.container::before {
+  content: "";
+  width: 6rem;   /* 24 */
+  height: 6rem;
+  position: absolute;
+  top: -1rem;
+  left: -1rem;
+  background: #a855f7;         /* purple-500 */
+  border-radius: 9999px;
+  z-index: -10;
+  filter: blur(40px);           /* blur-2xl */
+}
+
+.container::after {
+  content: "";
+  width: 8rem;   /* 32 */
+  height: 8rem;
+  position: absolute;
+  top: 6rem;     /* top-24 */
+  right: -3rem;  /* -right-12 */
+  background: #38bdf8;         /* sky-400 */
+  border-radius: 9999px;
+  z-index: -10;
+  filter: blur(20px);           /* blur-xl */
+}
+
+/* заголовок */
+h2 {
+  font-size: 1.5rem;            /* text-2xl */
+  font-weight: 700;             /* font-bold */
+  margin-bottom: 1.5rem;
+  color: #0c4a6e;               /* sky-900 */
+}
+
+/* формы */
+.form-group { margin-bottom: 1rem; }
+
+label {
+  display: block;
+  font-size: 0.875rem;          /* text-sm */
+  font-weight: 500;             /* font-medium */
+  color: #4b5563;               /* gray-600 */
+  margin-bottom: 0.25rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.5rem;              /* p-2 */
+  border: 1px solid #d1d5db;    /* gray-300 */
+  border-radius: 0.375rem;      /* rounded-md */
+  font-size: 1rem;
+  margin-top: 0.25rem;          /* mt-1 */
+  background: #fff;
+}
+
+textarea { resize: vertical; }
+
+/* действия */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;    /* justify-end */
+}
+
+/* кнопка */
+button {
+  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  color: #fff;
+  padding: 0.5rem 1rem;         /* py-2 px-4 */
+  font-weight: 700;
+  border: none;
+  border-radius: 0.375rem;      /* rounded-md */
+  cursor: pointer;
+  transition: opacity .2s ease;
+}
+button:hover { opacity: .8; }
+button:disabled { opacity: .6; cursor: not-allowed; }
+
+/* сообщения статуса */
+.msg { margin-top: .75rem; font-size: .9rem; }
+.msg.ok { color: #16a34a; }     /* green-600 */
+.msg.err { color: #dc2626; }    /* red-600 */
+.form-hint {
+  font-size: 0.8rem;
+  color: #6b7280; /* gray-500 */
+  margin-top: 0.25rem;
+}
